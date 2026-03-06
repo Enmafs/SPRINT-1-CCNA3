@@ -1,0 +1,502 @@
+-----------------------------------------
+SW
+-----------------------------------------
+en
+conf t
+hostname Sw
+no ip domain-lookup
+Banner motd #
+***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vlan 80 
+name DATACENTER
+vlan 90
+name BLACKHOLE2
+int range e0/1-3
+switchport access vlan 90
+shut
+int e0/1
+switchport access vlan 80
+no sh
+int e0/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 80,90
+no sh
+
+-----------------------------------------
+R2
+-----------------------------------------
+en
+conf t
+ipv6 unicast-routing
+hostname R2
+no ip domain-lookup
+Banner motd #
+***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+int e0/1
+no sh
+int e0/1.80
+encapsulation dot1Q 80
+ip address 172.22.10.1 255.255.255.192
+ipv6 address 2001:25:22:5::1/64
+ip ospf 1 area 1
+exit
+int e0/1.90
+encapsulation dot1Q 90
+ip address 172.22.10.145 255.255.255.240
+ipv6 address 2001:25:22:9::1/64
+ip ospf 1 area 1
+int e0/0
+no sh
+int e0/0.60
+encapsulation dot1Q 60
+ip address 172.22.9.129 255.255.255.128
+ipv6 address 2001:25:22:4::1/64
+ip ospf 1 area 2
+int e0/0.70
+encapsulation dot1Q 70
+ip address 172.22.9.1 255.255.255.128
+ipv6 address 2001:25:22:3::1/64
+ip ospf 1 area 2
+int s1/0
+ip address 172.22.10.162 255.255.255.252
+ipv6 address 2001:25:22:A::2/64
+ip ospf 1 area 0
+no sh
+exit
+router ospf 1
+router-id 2.2.2.2
+
+---------------------------------------
+SWA13
+---------------------------------------
+en
+conf t
+hostname SWA13
+Banner motd #
+***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vlan 60
+name Finanzas
+vlan 70
+name Academicos
+vlan 90
+name BLACKHOLE2
+int range e0/0-3
+switchport access vlan 90
+shut
+int e0/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 60,70,90
+no sh
+int e0/1
+switchport access vlan 60
+no sh
+int e0/2
+switchport access vlan 70
+no sh
+
+---------------------------------------
+R1-Core
+---------------------------------------
+en 
+conf t
+ipv6 unicast-routing
+hostname R1-Core
+no ip domain-lookup
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+int s1/0
+ip address 172.22.10.161 255.255.255.252
+ipv6 address 2001:25:22:A::1/64
+ip ospf 1 area 0
+no sh
+int e0/0
+no sh
+exit
+int e0/0
+no sh
+int e0/0.99
+encapsulation dot1q 99
+ip address 172.22.11.70 255.255.255.224
+ipv6 address 2001:25:22:60::1/64
+int e0/1
+no sh
+int e0/1.30
+encapsulation dot1Q 30
+ip address 172.22.10.65 255.255.255.224
+ipv6 address 2001:25:22:6::1/64
+ip ospf 1 area 3
+exit
+router ospf 1
+router-id 1.1.1.1
+network 172.22.11.70 0.0.0.0 area 3
+default-information originate
+int e0/2
+no sh
+ip address dhcp
+exit
+ip route 0.0.0.0 0.0.0.0 e0/2
+
+---------------------------------------
+SWM1
+---------------------------------------
+en 
+conf t
+ipv6 unicast-routing
+ip routing
+hostname SWM1
+no ip domain-lookup
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vtp domain SPRINT1.com
+vtp mode server
+vtp password cisco
+vlan 99
+name MGMT
+vlan 50
+name BLACKHOLE
+vlan 40
+name VOZ
+vlan 30
+name GESTION
+vlan 20
+name DOCENTES
+vlan 10
+name ESTUDIANTES
+int range e0/0-3
+channel-group 1 mode desirable
+exit
+int port-channel 1
+no sh
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,99
+exit
+
+int e1/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 30,40,50
+no sh
+int e1/1
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 20,50
+no sh
+int e1/2
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,50
+no sh
+
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,40,50,99 root primary
+
+interface Vlan 10
+ip address 172.22.0.2 255.255.248.0
+ipv6 address 2001:25:22:1::2/64
+ip ospf 1 area 3
+standby version 2
+standby 10 ip 172.22.0.3
+standby 10 ipv6 autoconfig
+standby 10 priority 110
+standby 10 preempt
+no sh
+
+interface Vlan 20
+ip address 172.22.8.2 255.255.255.0
+ipv6 address 2001:25:22:2::2/64
+ip ospf 1 area 3
+standby version 2
+standby 20 ip 172.22.8.3
+standby 20 ipv6 autoconfig
+standby 20 priority 110
+standby 20 preempt
+no sh
+
+interface Vlan 30
+ip address 172.22.10.66 255.255.255.224
+ipv6 address 2001:25:22:6::2/64
+ip ospf 1 area 3
+standby version 2
+standby 30 ip 172.22.10.67
+standby 30 ipv6 autoconfig
+standby 30 priority 110
+standby 30 preempt
+no sh
+
+interface Vlan 40
+ip address 172.22.10.98 255.255.255.224
+ipv6 address 2001:25:22:7::2/64
+ip ospf 1 area 3
+standby version 2
+standby 40 ip 172.22.10.99
+standby 40 ipv6 autoconfig
+standby 40 priority 110
+standby 40 preempt
+no sh
+
+
+interface Vlan 50
+ip address 172.22.10.130 255.255.255.248
+ipv6 address 2001:25:22:8::2/64
+ip ospf 1 area 3
+standby version 2
+standby 50 ip 172.22.10.131
+standby 50 ipv6 autoconfig
+standby 50 priority 110
+standby 50 preempt
+no sh
+
+interface Vlan 99
+ip address 172.22.11.65 255.255.255.224
+ipv6 address 2001:25:22:60::20/64
+ip ospf 1 area 3
+standby version 2
+standby 99 ip 172.22.11.67
+standby 99 ipv6 autoconfig
+standby 99 priority 110
+standby 99 preempt
+no sh
+exit
+
+ip access-list extended BLOCK_ESTUDIANTES
+deny ip 172.22.0.0 0.0.7.255 172.22.9.128 0.0.0.127
+permit ip any any
+exit
+interface Vlan 10
+ip access-group BLOCK_ESTUDIANTES in
+
+router ospf 1
+router-id 3.3.3.3
+
+---------------------------------------
+SWM2
+---------------------------------------
+en 
+conf t
+ipv6 unicast-routing
+ip routing
+hostname SWM2
+no ip domain-lookup
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vtp domain SPRINT1.com
+vtp mode server
+vtp password cisco
+
+int range e0/0-3
+channel-group 1 mode desirable
+exit
+int port-channel 1
+no sh
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,99
+exit
+
+int e1/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 30,40,50
+no sh
+int e1/1
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 20,50
+no sh
+int e1/2
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,50
+no sh
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,40,50,99 root secondary
+
+interface Vlan 10
+ip address 172.22.0.4 255.255.248.0
+ipv6 address 2001:25:22:1::4/64
+ip ospf 1 area 3
+standby version 2
+standby 10 ip 172.22.0.3
+standby 10 ipv6 autoconfig
+standby 10 priority 100
+standby 10 preempt
+no sh
+
+interface Vlan 20
+ip address 172.22.8.4 255.255.255.0
+ipv6 address 2001:25:22:2::4/64
+ip ospf 1 area 3
+standby version 2
+standby 20 ip 172.22.8.3
+standby 20 ipv6 autoconfig
+standby 20 priority 100
+standby 20 preempt
+no sh
+
+interface Vlan 30
+ip address 172.22.10.68 255.255.255.224
+ipv6 address 2001:25:22:6::4/64
+ip ospf 1 area 3
+standby version 2
+standby 30 ip 172.22.10.67
+standby 30 ipv6 autoconfig
+standby 30 priority 100
+standby 30 preempt
+no sh
+
+interface Vlan 40
+ip address 172.22.10.100 255.255.255.224
+ipv6 address 2001:25:22:7::4/64
+ip ospf 1 area 3
+standby version 2
+standby 40 ip 172.22.10.99
+standby 40 ipv6 autoconfig
+standby 40 priority 100
+standby 40 preempt
+no sh
+
+interface Vlan 50
+ip address 172.22.10.132 255.255.255.248
+ipv6 address 2001:25:22:8::4/64
+ip ospf 1 area 3
+standby version 2
+standby 50 ip 172.22.10.131
+standby 50 ipv6 autoconfig
+standby 50 priority 100
+standby 50 preempt
+no sh
+
+interface Vlan 99
+ip address 172.22.11.68 255.255.255.224
+ipv6 address 2001:25:22:60::30/64
+ip ospf 1 area 3
+standby version 2
+standby 99 ip 172.22.11.67
+standby 99 ipv6 autoconfig
+standby 99 priority 100
+standby 99 preempt
+no sh
+exit
+
+ip access-list extended BLOCK_ESTUDIANTES
+deny ip 172.22.0.0 0.0.7.255 172.22.9.128 0.0.0.127
+permit ip any any
+exit
+interface Vlan 10
+ip access-group BLOCK_ESTUDIANTES in
+
+router ospf 1
+router-id 4.4.4.4
+
+---------------------------------------
+SWAC1
+---------------------------------------
+en
+conf t
+hostname SWAC1
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vtp mode transparent
+vtp domain SPRINT1.com
+vtp password cisco
+vtp mode client
+int range e0/0-3
+switchport access vlan 50
+shut
+int e0/1
+switchport access vlan 30
+switchport voice vlan 40
+no sh
+exit
+int e0/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 30,40,50
+no sh
+int e1/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 30,40,50
+no sh
+
+---------------------------------------
+SWAC2
+---------------------------------------
+en
+conf t
+hostname SWAC2
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vtp mode transparent
+vtp domain SPRINT1.com
+vtp password cisco
+vtp mode client
+int range e0/0-3
+switchport access vlan 50
+shut
+int e0/2
+switchport access vlan 20
+no sh
+int e0/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 20,50
+no sh
+int e0/1
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 20,50
+no sh
+
+---------------------------------------
+SWAC3
+---------------------------------------
+en
+conf t
+hostname SWAC3
+Banner motd #  ***********************************************
+UNAUTHORIZED ACCESS IS PROHIBITED!
+CCNA3 > ONEL LUIS PELEGRINO
+*********************************************** #
+vtp mode transparent
+vtp domain SPRINT1.com
+vtp password cisco
+vtp mode client
+int range e0/0-3
+switchport access vlan 50
+shut
+int e0/2
+switchport access vlan 10
+no sh
+int e0/0
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,50
+no sh
+int e0/1
+switchport trunk encapsulation dot1Q
+switchport mode trunk
+switchport trunk allowed vlan 10,50
+no sh
