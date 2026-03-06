@@ -15,4 +15,8 @@ Más detalles de lo que corre detrás de la red:
 • VLAN                                                                                                                                                                                                                
 • VTP                                                                                                                                                                                                                 
 • VTP domains                                                                                                                                                                                                         
-• Routing on Stick                                                                                                                                                                                                    
+• Routing on Stick                                                                                                                                                                                                  
+                                                                                                                                                                                                                    
+                                                            **Topologi**                                                                                                                          
+                                                                                                                                                                                                                    
+<img width="1808" height="1047" alt="Captura de pantalla 2026-03-06 140113" src="https://github.com/user-attachments/assets/177a19d2-5d52-4efa-ac95-e538b6fd75ed" />
