@@ -24,5 +24,8 @@ Más detalles de lo que corre detrás de la red:
 Plan de direccionamiento (IPv4 + IPv6) HSRP                                                                                                                        
 <img width="1145" height="424" alt="image" src="https://github.com/user-attachments/assets/cc942334-bd82-4a60-a72b-5eade46d56bf" />
                                                                                                                                                                    
+Aunque debería ser la primera dirección en el gateway virtual de OSPF, coloqué la tercera dirección usable en la red.
+<img width="980" height="428" alt="image" src="https://github.com/user-attachments/assets/083a7b03-fc9d-4abc-98a9-accf153bff93" />
+                                                                                                                                                                   
 Tabla de Red                                                                                                                                                       
 <img width="894" height="353" alt="image" src="https://github.com/user-attachments/assets/abc31920-2e2d-43fb-b69d-d4e053899b15" />
