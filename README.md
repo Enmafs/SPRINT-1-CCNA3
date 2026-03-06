@@ -23,6 +23,6 @@ Más detalles de lo que corre detrás de la red:
                                                                                                                                                                    
 Plan de direccionamiento (IPv4 + IPv6) HSRP                                                                                                                        
 <img width="1145" height="424" alt="image" src="https://github.com/user-attachments/assets/cc942334-bd82-4a60-a72b-5eade46d56bf" />
-                                                                                                                                                                  
-En la configuración de HSRP, aunque debería ser la primera ip el geteway virtual, se coloca la tercera dirección usable en la misma.                               
-<img width="981" height="423" alt="image" src="https://github.com/user-attachments/assets/b950389a-2e04-41a1-8c75-de4a31c88e07" />
+                                                                                                                                                                   
+Tabla de Red                                                                                                                                                       
+<img width="894" height="353" alt="image" src="https://github.com/user-attachments/assets/abc31920-2e2d-43fb-b69d-d4e053899b15" />
