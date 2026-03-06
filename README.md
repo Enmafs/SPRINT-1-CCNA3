@@ -19,4 +19,10 @@ Más detalles de lo que corre detrás de la red:
                                                                                                                                                                                                                     
                                                             **Topologi**                                                                                                                          
                                                                                                                                                                                                                     
-<img width="1808" height="1047" alt="Captura de pantalla 2026-03-06 140113" src="https://github.com/user-attachments/assets/177a19d2-5d52-4efa-ac95-e538b6fd75ed" />
+<img width="1808" height="1047" alt="Captura de pantalla 2026-03-06 140113" src="https://github.com/user-attachments/assets/177a19d2-5d52-4efa-ac95-e538b6fd75ed" />                                                                                                                                                                 
+                                                                                                                                                                   
+Plan de direccionamiento (IPv4 + IPv6) HSRP                                                                                                                        
+<img width="1145" height="424" alt="image" src="https://github.com/user-attachments/assets/cc942334-bd82-4a60-a72b-5eade46d56bf" />
+                                                                                                                                                                  
+En la configuración de HSRP, aunque debería ser la primera ip el geteway virtual, se coloca la tercera dirección usable en la misma.                               
+<img width="981" height="423" alt="image" src="https://github.com/user-attachments/assets/b950389a-2e04-41a1-8c75-de4a31c88e07" />
